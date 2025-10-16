@@ -1,1 +1,49 @@
+--  Listar todos os clientes do tipo J (jurídico)
+SELECT * FROM Cliente WHERE tipo = 'J';
 
+--  Mostrar os pedidos feitos por um cliente específico (ex: cliente com id 3)
+SELECT * FROM Pedido WHERE cliente_id = 3;
+
+--  Ver quais produtos estão com estoque abaixo de 10
+SELECT * FROM Produto WHERE estoque < 10;
+
+--  Listar os fornecedores de um determinado produto (ex: produto com id 5)
+SELECT f.nome
+FROM Fornecedor f
+JOIN ProdutoFornecedor pf ON f.id = pf.fornecedor_id
+WHERE pf.produto_id = 5;
+
+--  Consultar os métodos de pagamento disponíveis para um cliente (ex: cliente com id 2)
+SELECT fp.nome, fp.tipo_pagamento
+FROM FormaPagamento fp
+JOIN ClienteFormaPagamento cfp ON fp.id = cfp.pagamento_id
+WHERE cfp.cliente_id = 2;
+
+--  Ver todos os pedidos com status de entrega "em trânsito"
+SELECT p.id, e.status
+FROM Pedido p
+JOIN Entrega e ON p.id = e.pedido_id
+WHERE e.status = 'em trânsito';
+
+--  Listar os produtos mais pedidos
+SELECT produto_id, COUNT(*) AS total_pedidos
+FROM ItemPedido
+GROUP BY produto_id
+ORDER BY total_pedidos DESC;
+
+--  Mostrar os clientes que mais compraram
+SELECT c.id, c.nome, COUNT(p.id) AS total_pedidos
+FROM Cliente c
+JOIN Pedido p ON c.id = p.cliente_id
+GROUP BY c.id, c.nome
+ORDER BY total_pedidos DESC;
+
+--  Ver quais produtos cada fornecedor fornece
+SELECT f.nome AS fornecedor, p.nome AS produto
+FROM ProdutoFornecedor pf
+JOIN Produto p ON pf.produto_id = p.id
+JOIN Fornecedor f ON pf.fornecedor_id = f.id
+ORDER BY f.nome;
+
+--  Consultar os pedidos feitos em uma data específica (ex: '2025-10-16') (data que estou fazendo esse diagrama)
+SELECT * FROM Pedido WHERE data_pedido = '2025-10-16';
